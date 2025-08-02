@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Card,
@@ -30,6 +30,7 @@ import {
   Refresh as RefreshIcon,
   LaptopChromebook as PlanningIcon
 } from '@mui/icons-material';
+import { createSoapNotes, getSoapNotes } from '@/services/soapNote';
 
 interface SOAPFormData {
   patientName: string;
@@ -57,6 +58,14 @@ interface ValidationErrors {
 }
 
 const SOAPNoteForm: React.FC = () => {
+
+ useEffect(() => {
+    // This effect can be used for any initialization logic if needed
+    getSoapNotes()
+    createSoapNotes({})
+  }, []);
+
+
   const [formData, setFormData] = useState<SOAPFormData>({
     patientName: '',
     patientId: '',
