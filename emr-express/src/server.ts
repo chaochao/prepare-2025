@@ -1,9 +1,11 @@
+require('dotenv').config()
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import soapRoutes from './routes/soapRoutes';
+import openAIRoutes from './routes/openAIRoutes';
+import deepseekRoutes from './routes/deepseekRoutes';
 import { soapService } from './services/soapService';
-
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -21,6 +23,8 @@ app.use((req, res, next) => {
 
 // Routes
 app.use('/api/soap', soapRoutes);
+app.use('/api/openai', openAIRoutes);
+app.use('/api/deepseek', deepseekRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -55,7 +59,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 app.listen(PORT, () => {
-  console.log(`🚀 SOAP Notes API server running on port ${PORT}`);
+  console.log(`🚀 SOAP Notes API server running on port this ${PORT}`);
   console.log(`📋 Health check: http://localhost:${PORT}/health`);
   console.log(`📝 API endpoints: http://localhost:${PORT}/api/soap`);
 });
