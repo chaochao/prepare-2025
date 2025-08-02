@@ -59,10 +59,11 @@ interface ValidationErrors {
 
 const SOAPNoteForm: React.FC = () => {
 
+
  useEffect(() => {
     // This effect can be used for any initialization logic if needed
     getSoapNotes()
-    createSoapNotes({})
+    // createSoapNotes({})
   }, []);
 
 
