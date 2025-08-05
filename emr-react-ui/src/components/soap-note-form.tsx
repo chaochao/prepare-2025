@@ -23,8 +23,10 @@ import {
   CheckCircle as CheckCircleIcon,
   Save as SaveIcon,
   Refresh as RefreshIcon,
-  LaptopChromebook as PlanningIcon
+  LaptopChromebook as PlanningIcon,
+
 } from '@mui/icons-material';
+import GeneratingTokensIcon from '@mui/icons-material/GeneratingTokens';
 import { createSoapNotes, getSoapNotes } from '@/services/soapNote';
 import { SoapNoteSubmitted } from './soap-note-submitted';
 
@@ -87,7 +89,7 @@ const SOAPNoteForm: React.FC = () => {
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-
+  const [isGenerating, setIsGenerating] = useState(false);
   const validateForm = (): boolean => {
     const newErrors: ValidationErrors = {};
 
@@ -176,6 +178,17 @@ const SOAPNoteForm: React.FC = () => {
     }
   };
 
+  const handleGenerate = async () => {
+    setIsGenerating(true)
+    try {
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      console.log('SOAP Note submitted:', formData);
+    } catch (error) {
+      console.error('Submission error:', error);
+    } finally {
+      setIsGenerating(false);
+    }
+  }
   const handleSubmit = async () => {
     if (!validateForm()) {
       return;
@@ -186,8 +199,14 @@ const SOAPNoteForm: React.FC = () => {
     // Simulate API call
     try {
       await new Promise(resolve => setTimeout(resolve, 2000));
-      console.log('SOAP Note submitted:', formData);
+      console.log('SOAP Note submitted:', formData.objective);
+      // To save time prove comcept
+      const submittedData = {
+        ...formData,
+        objective: JSON.stringify(formData.objective)
+      }
       setIsSubmitted(true);
+      createSoapNotes(submittedData)
     } catch (error) {
       console.error('Submission error:', error);
     } finally {
@@ -461,6 +480,16 @@ const SOAPNoteForm: React.FC = () => {
                 <Chip label="P" color="secondary" size="small" />
                 Plan
               </Typography>
+              <Button
+                variant="contained"
+                size="small"
+                onClick={handleGenerate}
+                disabled={isGenerating}
+                startIcon={isGenerating ? <CircularProgress size={20} /> : <GeneratingTokensIcon />}
+                sx={{ flex: 1, mb: 2, textTransform: 'none' }}
+              >
+                {isGenerating ? 'Generating...' : 'generate plan with AI'}
+              </Button>
               <TextField
                 fullWidth
                 required
