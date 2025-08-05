@@ -86,7 +86,7 @@ export const deleteSoapNotes = async (id: string) => {
         console.error('Error deleting SOAP note:', _error);
       }
 };
-
+// TODO: use react-query to fetch SOAP notes
 export const useSoapNotes = () => {
     // return useQuery<SoapNote[]>({
     //     queryKey: ['soapNotes'],

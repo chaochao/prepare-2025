@@ -1,7 +1,5 @@
 require('dotenv').config()
-import { Router, Request, Response } from 'express';
-import { soapService } from '../services/soapService';
-import { validateCreateSOAPNote, validateUpdateSOAPNote } from '../middleware/validation';
+import { Router } from 'express';
 import OpenAI from 'openai';
 const router = Router();
 
@@ -14,10 +12,6 @@ const openai = new OpenAI({
 router.get('/generate', async (req, res) => {
   try {
     const { prompt, model = 'gpt-3.5-turbo', max_tokens = 500 } = req.body;
-
-    // if (!prompt) {
-    //   return res.status(400).json({ error: 'Prompt is required' });
-    // }
 
     const completion = await openai.chat.completions.create({
       model,
