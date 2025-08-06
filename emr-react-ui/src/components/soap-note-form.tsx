@@ -208,10 +208,8 @@ const SOAPNoteForm: React.FC = () => {
     }
 
     setIsSubmitting(true);
-    
-    // Simulate API call
+
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
       console.log('SOAP Note submitted:', formData.objective);
       // To save time prove comcept
       const submittedData = {
@@ -219,7 +217,7 @@ const SOAPNoteForm: React.FC = () => {
         objective: JSON.stringify(formData.objective)
       }
       setIsSubmitted(true);
-      createSoapNotes(submittedData)
+      await createSoapNotes(submittedData)
     } catch (error) {
       console.error('Submission error:', error);
     } finally {

@@ -1,5 +1,5 @@
 {
-  "name": "emr-express",
+  "name": "emr-backend",
   "version": "1.0.0",
   "description": "Simple SOAP Notes API with Express and TypeScript",
   "main": "dist/server.js",
