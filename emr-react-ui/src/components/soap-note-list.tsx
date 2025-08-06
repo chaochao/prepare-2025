@@ -10,6 +10,7 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  Input,
 } from '@mui/material';
 import { format } from "date-fns";
 
@@ -64,8 +65,10 @@ export const SoapNoteList = () => {
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <div>details</div>
               {/* Add more details here if available in SOAPNoteObject */}
+              <span style={{whiteSpace: "pre-line"}}>
+                {note.objective ? `${note.objective}` : "No objective data available"}
+              </span>
             </AccordionDetails>
           </Accordion>
         ))}

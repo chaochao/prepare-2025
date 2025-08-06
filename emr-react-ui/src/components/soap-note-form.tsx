@@ -29,6 +29,7 @@ import GeneratingTokensIcon from '@mui/icons-material/GeneratingTokens';
 import { createSoapNotes, getSoapNotes } from '@/services/soapNote';
 import { SoapNoteSubmitted } from './soap-note-submitted';
 import { generatePlan } from '@/services/generate';
+import { stringifyObjective } from '@/utils';
 
 
 export interface SOAPNoteObject extends SOAPFormData{
@@ -214,7 +215,7 @@ const SOAPNoteForm: React.FC = () => {
       // To save time prove comcept
       const submittedData = {
         ...formData,
-        objective: JSON.stringify(formData.objective)
+        objective: stringifyObjective(formData.objective)
       }
       setIsSubmitted(true);
       await createSoapNotes(submittedData)
