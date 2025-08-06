@@ -20,7 +20,6 @@ import {
   Assignment as AssignmentIcon,
   LocalHospital as LocalHospitalIcon,
   Assessment as AssessmentIcon,
-  CheckCircle as CheckCircleIcon,
   Save as SaveIcon,
   Refresh as RefreshIcon,
   LaptopChromebook as PlanningIcon,
@@ -29,8 +28,16 @@ import {
 import GeneratingTokensIcon from '@mui/icons-material/GeneratingTokens';
 import { createSoapNotes, getSoapNotes } from '@/services/soapNote';
 import { SoapNoteSubmitted } from './soap-note-submitted';
+import { generatePlan } from '@/services/generate';
 
-interface SOAPFormData {
+
+export interface SOAPNoteObject extends SOAPFormData{
+  id: string
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SOAPFormData {
   patientName: string;
   patientId: string;
   dateOfService: string;
@@ -61,7 +68,6 @@ const SOAPNoteForm: React.FC = () => {
  useEffect(() => {
     // This effect can be used for any initialization logic if needed
     getSoapNotes()
-    // createSoapNotes({})
   }, []);
 
 
@@ -181,8 +187,15 @@ const SOAPNoteForm: React.FC = () => {
   const handleGenerate = async () => {
     setIsGenerating(true)
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
       console.log('SOAP Note submitted:', formData);
+      const data = await generatePlan(formData)
+      console.log(data)
+      if (data && data.result) {
+        setFormData(prev => ({
+          ...prev,
+          plan: data.result
+        }));
+      }
     } catch (error) {
       console.error('Submission error:', error);
     } finally {

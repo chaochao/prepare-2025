@@ -1,14 +1,9 @@
 import React from 'react';
 import SoapNoteCreate from '@/components/soap-note-form';
-
-
- 
-
-
- const Home = () => {
+ const CreateHome = () => {
     return (
         <SoapNoteCreate />
     );
 }
 
-export default Home
+export default CreateHome
