@@ -26,10 +26,10 @@ import {
 
 } from '@mui/icons-material';
 import GeneratingTokensIcon from '@mui/icons-material/GeneratingTokens';
-import { createSoapNotes } from '@/services/soapNote';
 import { SoapNoteSubmitted } from './soap-note-submitted';
 import { generatePlan } from '@/services/generate';
-
+import { useMutation } from '@tanstack/react-query';
+import { queryClient } from '@/lib/queryClient';
 
 export interface SOAPNoteObject extends SOAPFormData{
   id: string
@@ -64,7 +64,21 @@ interface ValidationErrors {
 
 const SOAPNoteForm: React.FC = () => {
 
-
+  const { mutate: createSoapNote, error, isSuccess, reset } = useMutation({
+    mutationFn: async (soapNote: SOAPFormData) => {
+      const res = await fetch(`http://localhost:3001/api/soap`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(soapNote),
+      });
+      if (!res.ok) throw new Error('Failed to add post');
+      return res.json();
+    },
+    onSuccess: () => {
+      // Invalidate the 'posts' query to refetch fresh data
+      queryClient.invalidateQueries({ queryKey: ['soapNotes'] });
+    },
+  });
 
   const [formData, setFormData] = useState<SOAPFormData>({
     patientName: '',
@@ -183,9 +197,7 @@ const SOAPNoteForm: React.FC = () => {
   const handleGenerate = async () => {
     setIsGenerating(true)
     try {
-      console.log('SOAP Note data:', formData);
       const data = await generatePlan(formData)
-      console.log(data)
       if (data && data.result) {
         setFormData(prev => ({
           ...prev,
@@ -206,14 +218,7 @@ const SOAPNoteForm: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      console.log('SOAP Note submitted:', formData);
-      const res = await createSoapNotes(formData)
-      console.log(res)
-     if(res.success) {
-      setIsSubmitted(true)
-     } else {
-      setsubmitError( res?.message || 'something wrong')
-     }
+      await createSoapNote(formData)
     } catch (error) {
       console.error('Submission error:', error);
     } finally {
@@ -222,6 +227,7 @@ const SOAPNoteForm: React.FC = () => {
   };
 
   const handleReset = () => {
+    reset()
     setFormData({
       patientName: '',
       patientId: '',
@@ -250,6 +256,11 @@ const SOAPNoteForm: React.FC = () => {
     return <SoapNoteSubmitted handleReset={handleReset} formData={formData} />
   }
 
+  if(isSuccess) {
+      setIsSubmitted(true)
+     } else if (error?.message){
+      setsubmitError( error?.message || 'something wrong')
+     }
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Card elevation={3}>

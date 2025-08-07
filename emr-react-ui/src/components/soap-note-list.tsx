@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { getSoapNotes } from "@/services/soapNote";
+import { fetchSoapNotes, getSoapNotes } from "@/services/soapNote";
 import { SOAPNoteObject } from "@/components/soap-note-form";
 import {
   Card,
@@ -16,25 +16,20 @@ import {
 import { format } from "date-fns";
 import { stringifyObjective } from "@/utils";
 import { useRouter } from "next/router";
+import { useQuery } from "@tanstack/react-query";
+const CREATE_PATH = '/soap-notes/create';
 export const SoapNoteList = () => {
-  const [soapNotes, setSoapNotes] = useState<SOAPNoteObject[]>([]);
   
-  const fetchSoapNotes = async () => {
-    try {
-      const notes = await getSoapNotes();
-      setSoapNotes(notes?.data || []);
-    } catch (error) {
-      console.error("Failed to fetch SOAP notes:", error);
-    }
-  };
-  
-  useEffect(() => {
-    fetchSoapNotes();
-  }, []);
+  const { data} = useQuery({
+    queryKey: ['soapNotes'], 
+    queryFn: fetchSoapNotes,
+  });
+  const soapNotes = data?.data as SOAPNoteObject[] || [];
   const router = useRouter()
   const handleToCreate = () => {
-    router.push('/soap-notes/create')
+    router.push(CREATE_PATH)
   }
+  console.log("soapNotes:", data);
   return (
     <Card elevation={3} sx={{ maxWidth: 800, margin: 'auto', mt: 4 }}>
       <CardContent>

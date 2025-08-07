@@ -1,8 +1,5 @@
-// a get function to retrieve SOAP note data
-
 import { SOAPFormData } from "@/components/soap-note-form";
-
-
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 export const getSoapNotes = async () => {
   try {
@@ -80,10 +77,10 @@ export const deleteSoapNotes = async (id: string) => {
         console.error('Error deleting SOAP note:', _error);
       }
 };
-// TODO: use react-query to fetch SOAP notes
-export const useSoapNotes = () => {
-    // return useQuery<SoapNote[]>({
-    //     queryKey: ['soapNotes'],
-    //     queryFn: () => getSoapNotes(),
-    // });
-    };
+
+
+export async function fetchSoapNotes() {
+  const res = await fetch(`${baseUrl}/api/soap`);
+  return res.json();
+}
+
