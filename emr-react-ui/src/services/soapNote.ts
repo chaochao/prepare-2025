@@ -1,5 +1,7 @@
 // a get function to retrieve SOAP note data
 
+import { SOAPFormData } from "@/components/soap-note-form";
+
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 export const getSoapNotes = async () => {
@@ -17,11 +19,11 @@ export const getSoapNotes = async () => {
       }
 };
 
-export const createSoapNotes = async (soapNote: Record<string,string>) => {
+export const createSoapNotes = async (soapNote: SOAPFormData) => {
   try {
         const response = await fetch(`${baseUrl}/api/soap`, {
           method: 'POST',
-          headers: {
+            headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(soapNote),
@@ -29,14 +31,15 @@ export const createSoapNotes = async (soapNote: Record<string,string>) => {
 
         if (!response.ok) {
           console.error('API call failed with status:', response.status);
-          return null; // Or return a default value
+          const error = await response.json();
+          return error; // Or return a default value
         }
 
         const data = await response.json();
         console.log('Data:', data);
         return data;
-      } catch (_error) {
-        
+      } catch (error: unknown) {
+        return {success: false, message: `${error}`}
       }
 };
 

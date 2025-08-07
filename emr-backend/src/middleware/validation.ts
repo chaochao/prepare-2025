@@ -23,8 +23,8 @@ export const validateCreateSOAPNote = (
     errors.push('subjective is required and must be a non-empty string');
   }
 
-  if (!objective || typeof objective !== 'string' || objective.trim().length === 0) {
-    errors.push('objective is required and must be a non-empty string');
+  if (!objective || objective.labResults.length === 0) {
+    errors.push('objective is required');
   }
 
   if (!assessment || typeof assessment !== 'string' || assessment.trim().length === 0) {

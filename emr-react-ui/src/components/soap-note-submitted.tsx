@@ -1,10 +1,10 @@
 import React from "react";
 import { Button, Card, CardContent, Container, Typography } from "@mui/material";
 import {
-  
   CheckCircle as CheckCircleIcon,
   Refresh as RefreshIcon,
 } from '@mui/icons-material';
+import { useRouter } from "next/router";
 interface SoapNoteSubmittedProps {
   formData: {
       patientName: string;
@@ -13,6 +13,10 @@ interface SoapNoteSubmittedProps {
 } 
 
 export const SoapNoteSubmitted = ({handleReset, formData}: SoapNoteSubmittedProps) => {
+    const router = useRouter()
+    const handleToList = () => {
+      router.push('/soap-notes/list')
+    }
     return (
         <Container maxWidth="md" sx={{ py: 4 }}>
         <Card elevation={3}>
@@ -26,11 +30,20 @@ export const SoapNoteSubmitted = ({handleReset, formData}: SoapNoteSubmittedProp
             </Typography>
             <Button
               variant="contained"
-              size="large"
+              size="small"
               onClick={handleReset}
               startIcon={<RefreshIcon />}
+              sx={{mr: 1}}
             >
               Create New Note
+            </Button>
+            <Button
+              variant="contained"
+              size="small"
+              onClick={handleToList}
+              startIcon={<RefreshIcon />}
+            >
+              To list page
             </Button>
           </CardContent>
         </Card>

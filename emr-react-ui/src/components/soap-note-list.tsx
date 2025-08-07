@@ -10,17 +10,19 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  Input,
+  Button,
+  Grid,
 } from '@mui/material';
 import { format } from "date-fns";
-
+import { stringifyObjective } from "@/utils";
+import { useRouter } from "next/router";
 export const SoapNoteList = () => {
   const [soapNotes, setSoapNotes] = useState<SOAPNoteObject[]>([]);
   
   const fetchSoapNotes = async () => {
     try {
       const notes = await getSoapNotes();
-      setSoapNotes(notes.data || []);
+      setSoapNotes(notes?.data || []);
     } catch (error) {
       console.error("Failed to fetch SOAP notes:", error);
     }
@@ -29,13 +31,22 @@ export const SoapNoteList = () => {
   useEffect(() => {
     fetchSoapNotes();
   }, []);
-
+  const router = useRouter()
+  const handleToCreate = () => {
+    router.push('/soap-notes/create')
+  }
   return (
     <Card elevation={3} sx={{ maxWidth: 800, margin: 'auto', mt: 4 }}>
       <CardContent>
-        <Typography variant="h5" gutterBottom component="h1">
-          SOAP Notes List
-        </Typography>
+        <Grid container margin={'8px 0'}>
+          <Typography variant="h5" gutterBottom component="h1">
+            SOAP Notes List
+          </Typography>
+          <Button sx={{ml: 'auto'}} variant="contained" size="small" onClick={handleToCreate}>
+              Create new soap
+          </Button>
+        </Grid>
+        
         
         {(soapNotes || []).map((note) => (
           <Accordion 
@@ -67,7 +78,7 @@ export const SoapNoteList = () => {
             <AccordionDetails>
               {/* Add more details here if available in SOAPNoteObject */}
               <span style={{whiteSpace: "pre-line"}}>
-                {note.objective ? `${note.objective}` : "No objective data available"}
+                {note.objective ? `${stringifyObjective(note.objective)}` : "No objective data available"}
               </span>
             </AccordionDetails>
           </Accordion>

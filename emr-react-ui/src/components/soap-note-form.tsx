@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Card,
@@ -26,10 +26,9 @@ import {
 
 } from '@mui/icons-material';
 import GeneratingTokensIcon from '@mui/icons-material/GeneratingTokens';
-import { createSoapNotes, getSoapNotes } from '@/services/soapNote';
+import { createSoapNotes } from '@/services/soapNote';
 import { SoapNoteSubmitted } from './soap-note-submitted';
 import { generatePlan } from '@/services/generate';
-import { stringifyObjective } from '@/utils';
 
 
 export interface SOAPNoteObject extends SOAPFormData{
@@ -66,11 +65,6 @@ interface ValidationErrors {
 const SOAPNoteForm: React.FC = () => {
 
 
- useEffect(() => {
-    // This effect can be used for any initialization logic if needed
-    getSoapNotes()
-  }, []);
-
 
   const [formData, setFormData] = useState<SOAPFormData>({
     patientName: '',
@@ -94,6 +88,7 @@ const SOAPNoteForm: React.FC = () => {
   });
 
   const [errors, setErrors] = useState<ValidationErrors>({});
+  const [submitError, setsubmitError] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -188,7 +183,7 @@ const SOAPNoteForm: React.FC = () => {
   const handleGenerate = async () => {
     setIsGenerating(true)
     try {
-      console.log('SOAP Note submitted:', formData);
+      console.log('SOAP Note data:', formData);
       const data = await generatePlan(formData)
       console.log(data)
       if (data && data.result) {
@@ -198,7 +193,7 @@ const SOAPNoteForm: React.FC = () => {
         }));
       }
     } catch (error) {
-      console.error('Submission error:', error);
+      console.error('generate error:', error);
     } finally {
       setIsGenerating(false);
     }
@@ -211,14 +206,14 @@ const SOAPNoteForm: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      console.log('SOAP Note submitted:', formData.objective);
-      // To save time prove comcept
-      const submittedData = {
-        ...formData,
-        objective: stringifyObjective(formData.objective)
-      }
-      setIsSubmitted(true);
-      await createSoapNotes(submittedData)
+      console.log('SOAP Note submitted:', formData);
+      const res = await createSoapNotes(formData)
+      console.log(res)
+     if(res.success) {
+      setIsSubmitted(true)
+     } else {
+      setsubmitError( res?.message || 'something wrong')
+     }
     } catch (error) {
       console.error('Submission error:', error);
     } finally {
@@ -520,6 +515,7 @@ const SOAPNoteForm: React.FC = () => {
             <Divider />
 
             {/* Form Actions */}
+            {submitError ? <div>{submitError}</div> : null}
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ pt: 2 }}>
               <Button
                 variant="contained"

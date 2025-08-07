@@ -30,7 +30,7 @@ class SOAPService {
       patientName: noteData.patientName.trim(),
       date: now.split('T')[0], // YYYY-MM-DD format
       subjective: noteData.subjective.trim(),
-      objective: noteData.objective.trim(),
+      objective: noteData.objective,
       assessment: noteData.assessment.trim(),
       plan: noteData.plan.trim(),
       createdAt: now,
@@ -70,7 +70,17 @@ class SOAPService {
         patientId: 'P001',
         patientName: 'John Doe',
         subjective: 'Patient reports chest pain that started 2 hours ago. Pain is described as sharp, 7/10 intensity.',
-        objective: 'BP: 140/90, HR: 88, RR: 16, Temp: 98.6°F. Chest clear to auscultation bilaterally.',
+        objective: {
+          vitalSigns: {
+            temperature: '98.6°F',
+            bloodPressure: '140/90',
+            heartRate: '88 bpm',
+            respiratoryRate: '16/min',
+            oxygenSaturation: '98%'
+           },
+          physicalExam: 'Normal heart sounds, no murmurs. Lungs clear to auscultation bilaterally.',
+          labResults: 'not yet',
+        },
         assessment: 'Chest pain, possible angina. Rule out myocardial infarction.',
         plan: 'EKG, cardiac enzymes, chest X-ray. Start on aspirin 81mg daily. Follow up in 24 hours.'
       },
@@ -78,7 +88,17 @@ class SOAPService {
         patientId: 'P002',
         patientName: 'Jane Smith',
         subjective: 'Patient complains of persistent cough for 1 week, productive with yellow sputum.',
-        objective: 'BP: 120/80, HR: 72, RR: 18, Temp: 101.2°F. Rhonchi heard in right lower lobe.',
+        objective: {
+          vitalSigns: {
+            temperature: '101.6°F',
+            bloodPressure: '140/80',
+            heartRate: '72 bpm',
+            respiratoryRate: '16/min',
+            oxygenSaturation: '98%'
+           },
+          physicalExam: 'Rhonchi heard in right lower lobe.',
+          labResults: 'not yet',
+        },
         assessment: 'Pneumonia, right lower lobe.',
         plan: 'Chest X-ray, CBC, sputum culture. Start amoxicillin 500mg TID x 7 days. Return if worsening.'
       }
