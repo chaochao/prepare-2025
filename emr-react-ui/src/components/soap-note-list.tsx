@@ -1,6 +1,4 @@
 import React from "react";
-import { useEffect, useState } from "react";
-import { fetchSoapNotes, getSoapNotes } from "@/services/soapNote";
 import { SOAPNoteObject } from "@/components/soap-note-form";
 import {
   Card,
@@ -16,14 +14,12 @@ import {
 import { format } from "date-fns";
 import { stringifyObjective } from "@/utils";
 import { useRouter } from "next/router";
-import { useQuery } from "@tanstack/react-query";
+import { useSoapNotes } from "@/hooks/useSoapNotes";
+
 const CREATE_PATH = '/soap-notes/create';
 export const SoapNoteList = () => {
   
-  const { data} = useQuery({
-    queryKey: ['soapNotes'], 
-    queryFn: fetchSoapNotes,
-  });
+  const { data} = useSoapNotes()
   const soapNotes = data?.data as SOAPNoteObject[] || [];
   const router = useRouter()
   const handleToCreate = () => {

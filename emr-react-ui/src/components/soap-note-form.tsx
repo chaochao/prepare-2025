@@ -30,6 +30,8 @@ import { SoapNoteSubmitted } from './soap-note-submitted';
 import { generatePlan } from '@/services/generate';
 import { useMutation } from '@tanstack/react-query';
 import { queryClient } from '@/lib/queryClient';
+import { createSoapNote } from '@/services/soapNote';
+import { useCreateSoapNote } from '@/hooks/useSoapNotes';
 
 export interface SOAPNoteObject extends SOAPFormData{
   id: string
@@ -64,21 +66,7 @@ interface ValidationErrors {
 
 const SOAPNoteForm: React.FC = () => {
 
-  const { mutate: createSoapNote, error, isSuccess, reset } = useMutation({
-    mutationFn: async (soapNote: SOAPFormData) => {
-      const res = await fetch(`http://localhost:3001/api/soap`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(soapNote),
-      });
-      if (!res.ok) throw new Error('Failed to add post');
-      return res.json();
-    },
-    onSuccess: () => {
-      // Invalidate the 'posts' query to refetch fresh data
-      queryClient.invalidateQueries({ queryKey: ['soapNotes'] });
-    },
-  });
+  const { mutate: createNewSoapNote, error, isSuccess, reset } = useCreateSoapNote()
 
   const [formData, setFormData] = useState<SOAPFormData>({
     patientName: '',
@@ -218,7 +206,7 @@ const SOAPNoteForm: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      await createSoapNote(formData)
+      await createNewSoapNote(formData)
     } catch (error) {
       console.error('Submission error:', error);
     } finally {

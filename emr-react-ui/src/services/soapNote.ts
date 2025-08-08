@@ -1,86 +1,42 @@
 import { SOAPFormData } from "@/components/soap-note-form";
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-export const getSoapNotes = async () => {
-  try {
-        const response = await fetch(`${baseUrl}/api/soap`); // Your API endpoint
-        if (!response.ok) {
-          console.error('API call failed with status:', response.status);
-          return null; // Or return a default value
-        }
-        const data = await response.json();
-        console.log('Data:', data);
-        return data;
-      } catch (_error) {
-        // do nothing for now
-      }
+
+export const createSoapNote = async (soapNote: SOAPFormData) => {
+  const res = await fetch(`${baseUrl}/api/soap`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(soapNote),
+  });
+  if (!res.ok) throw new Error('Failed to create soap note');
+  return res.json();
 };
 
-export const createSoapNotes = async (soapNote: SOAPFormData) => {
-  try {
-        const response = await fetch(`${baseUrl}/api/soap`, {
-          method: 'POST',
-            headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(soapNote),
-        });
-
-        if (!response.ok) {
-          console.error('API call failed with status:', response.status);
-          const error = await response.json();
-          return error; // Or return a default value
-        }
-
-        const data = await response.json();
-        console.log('Data:', data);
-        return data;
-      } catch (error: unknown) {
-        return {success: false, message: `${error}`}
-      }
+export const updateSoapNote = async (id: string, soapNote: SOAPFormData) => {
+  
+    const res = await fetch(`${baseUrl}/api/soap/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },  
+      body: JSON.stringify(soapNote),
+    });
+    if (!res.ok) throw new Error('Failed to update soap note');
+    return res.json();
 };
 
-export const updateSoapNotes = async (id: string, soapNote: Record<string,string>) => {
-  try {
-        const response = await fetch(`${baseUrl}/api/soap/${id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },  
-          body: JSON.stringify(soapNote),
-        });
-        if (!response.ok) {
-          console.error('API call failed with status:', response.status);
-          return null; // Or return a default value
-        }
-        const data = await response.json();
-        console.log('Data:', data);
-        return data;
-      } catch (_error) {
-        console.error('Error updating SOAP note:', _error);
-      }
-};
-
-export const deleteSoapNotes = async (id: string) => {
-  try {
-        const response = await fetch(`${baseUrl}/api/soap/${id}`, {
-          method: 'DELETE',
-        });
-        if (!response.ok) {
-          console.error('API call failed with status:', response.status);
-          return null; // Or return a default value
-        }
-        const data = await response.json();
-        console.log('Data:', data);
-        return data;
-      } catch (_error) {
-        console.error('Error deleting SOAP note:', _error);
-      }
+export const deleteSoapNote = async (id: string) => {
+  
+      const res = await fetch(`${baseUrl}/api/soap/${id}`, {
+        method: 'DELETE',
+      });
+      if (!res.ok) throw new Error('Failed to delete soap note');
+      return res.json();
 };
 
 
 export async function fetchSoapNotes() {
   const res = await fetch(`${baseUrl}/api/soap`);
+  if (!res.ok) throw new Error('Failed to get soap note');
   return res.json();
 }
 
