@@ -4,8 +4,8 @@ import { Router, Request, Response } from 'express';
 import OpenAI from 'openai';
 const router = Router();
 
-const SYSTEM_PROMPT = `You are a clinic doctor. When provided with a patient's SOAP note data in JSON format (including subjective, objective, and assessment), generate the 'plan' section in 1-2 concise sentences.`
-const generateUserPrompt = (data: any) => {
+export const SYSTEM_PROMPT = `You are a clinic doctor. When provided with a patient's SOAP note data in JSON format (including subjective, objective, and assessment), generate the 'plan' section in 1-2 concise sentences.`
+export const generateUserPrompt = (data: any) => {
   return `Generate a concise 'plan' section based on the following SOAP note data:\n
 Subjective: ${data.subjective}\n
 Objective: ${JSON.stringify(data.objective)}\n
