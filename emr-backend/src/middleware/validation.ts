@@ -1,6 +1,6 @@
 // src/middleware/validation.ts
 import { Request, Response, NextFunction } from 'express';
-import { CreateSOAPNoteRequest } from '../types/soap';
+import { CreateSOAPNoteRequest, Objective } from '../types/soap';
 
 export const validateCreateSOAPNote = (
   req: Request,
@@ -23,8 +23,22 @@ export const validateCreateSOAPNote = (
     errors.push('subjective is required and must be a non-empty string');
   }
 
-  if (!objective || objective.labResults.length === 0) {
-    errors.push('objective is required');
+  // Fixed objective validation - properly check object structure
+  if (!objective || typeof objective !== 'object') {
+    errors.push('objective is required and must be an object');
+  } else {
+    // Validate objective structure
+    if (!objective.vitalSigns || typeof objective.vitalSigns !== 'object') {
+      errors.push('objective.vitalSigns is required and must be an object');
+    }
+    
+    if (!objective.physicalExam || typeof objective.physicalExam !== 'string' || objective.physicalExam.trim().length === 0) {
+      errors.push('objective.physicalExam is required and must be a non-empty string');
+    }
+    
+    if (typeof objective.labResults !== 'string') {
+      errors.push('objective.labResults must be a string');
+    }
   }
 
   if (!assessment || typeof assessment !== 'string' || assessment.trim().length === 0) {
@@ -73,14 +87,28 @@ export const validateUpdateSOAPNote = (
     return;
   }
 
-  // Validate each provided field
+  // Validate each provided field with proper type checking
   for (const field of providedFields) {
-    if (typeof body[field] !== 'string' || body[field].trim().length === 0) {
-      res.status(400).json({
-        success: false,
-        message: `${field} must be a non-empty string`
-      });
-      return;
+    const value = body[field];
+    
+    if (field === 'objective') {
+      // Special handling for objective field
+      if (typeof value !== 'object' || value === null) {
+        res.status(400).json({
+          success: false,
+          message: 'objective must be an object'
+        });
+        return;
+      }
+    } else {
+      // String fields validation
+      if (typeof value !== 'string' || value.trim().length === 0) {
+        res.status(400).json({
+          success: false,
+          message: `${field} must be a non-empty string`
+        });
+        return;
+      }
     }
   }
 
