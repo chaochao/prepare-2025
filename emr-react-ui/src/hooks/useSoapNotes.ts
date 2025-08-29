@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { createSoapNote, deleteSoapNote, fetchSoapNotes, updateSoapNote } from "@/services/soapNote";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { SOAPFormData } from "@/components/soap-note-form";
+import { queryClient } from "@/lib/queryClient";
 export const useSoapNotes = () => {
   return useQuery({
     queryKey: ['soapNotes'], 
@@ -10,7 +11,6 @@ export const useSoapNotes = () => {
 };
 
 export const useCreateSoapNote = () => {
-  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: createSoapNote,
     onSuccess: () => {
@@ -21,7 +21,6 @@ export const useCreateSoapNote = () => {
 
 
 export const useUpdateSoapNote = () => {
-  const queryClient = useQueryClient();
   
   return useMutation({
     mutationFn: ({ id, soapNote }: { id: string; soapNote: SOAPFormData }) => updateSoapNote(id, soapNote),
@@ -32,7 +31,6 @@ export const useUpdateSoapNote = () => {
 };
 
 export const useDeleteSoapNote = () => {
-  const queryClient = useQueryClient();
   
   return useMutation({
     mutationFn: deleteSoapNote,
