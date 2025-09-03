@@ -22,6 +22,7 @@ app.use((req, res, next) => {
 });
 
 // Routes
+// TODO: should be soap-notes
 app.use('/api/soap', soapRoutes);
 app.use('/api/openai', openAIRoutes);
 app.use('/api/deepseek', deepseekRoutes);
