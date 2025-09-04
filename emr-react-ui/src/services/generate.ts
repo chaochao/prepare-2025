@@ -2,6 +2,7 @@ import { SOAPFormData } from "@/components/soap-note-form";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
+// TODO: use tanstack build custom hook
 export const generatePlan = async (soapNote: SOAPFormData) => {
   try {
         const response = await fetch(`${baseUrl}/api/deepseek/generate`, {
@@ -24,6 +25,6 @@ export const generatePlan = async (soapNote: SOAPFormData) => {
         const data = await response.json();
         return data;
       } catch (_error) {
-        
+        // TODO: return some error message
       }
 };

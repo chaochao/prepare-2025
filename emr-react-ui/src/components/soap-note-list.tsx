@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 import { useSoapNotes } from "@/hooks/useSoapNotes";
 
 const CREATE_PATH = '/soap-notes/create';
+// TODO: ADD edit feature, generate pdf preview according to the data
 export const SoapNoteList = () => {
   
   const { data} = useSoapNotes()
