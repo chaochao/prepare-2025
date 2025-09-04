@@ -65,6 +65,7 @@ const SOAPNoteForm: React.FC = () => {
 
   const { mutate: createNewSoapNote, error, isSuccess, reset } = useCreateSoapNote()
   // TODO: we may use useReducer
+  // NOTE: but will reducer fix the slow typing issue?
   const [formData, setFormData] = useState<SOAPFormData>({
     patientName: '',
     patientId: '',
@@ -88,8 +89,10 @@ const SOAPNoteForm: React.FC = () => {
 
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [submitError, setSubmitError] = useState<string>('');
+  // TODO: redesign for the state, the confirm page could be in another page
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  // NOTE: this AI generation part is also can be replace by use tanstack
   const [isGenerating, setIsGenerating] = useState(false);
   //TODO:  this can be move to it's own component
   const validateForm = (): boolean => {
