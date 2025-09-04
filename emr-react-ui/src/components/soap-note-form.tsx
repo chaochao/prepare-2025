@@ -26,11 +26,8 @@ import {
 
 } from '@mui/icons-material';
 import GeneratingTokensIcon from '@mui/icons-material/GeneratingTokens';
-import { SoapNoteSubmitted } from './soap-note-submitted';
+import SoapNoteSubmitted from './soap-note-submitted';
 import { generatePlan } from '@/services/generate';
-import { useMutation } from '@tanstack/react-query';
-import { queryClient } from '@/lib/queryClient';
-import { createSoapNote } from '@/services/soapNote';
 import { useCreateSoapNote } from '@/hooks/useSoapNotes';
 
 export interface SOAPNoteObject extends SOAPFormData{
@@ -67,7 +64,7 @@ interface ValidationErrors {
 const SOAPNoteForm: React.FC = () => {
 
   const { mutate: createNewSoapNote, error, isSuccess, reset } = useCreateSoapNote()
-
+  // TODO: we may use useReducer
   const [formData, setFormData] = useState<SOAPFormData>({
     patientName: '',
     patientId: '',
@@ -90,10 +87,11 @@ const SOAPNoteForm: React.FC = () => {
   });
 
   const [errors, setErrors] = useState<ValidationErrors>({});
-  const [submitError, setsubmitError] = useState<string>('');
+  const [submitError, setSubmitError] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+  //TODO:  this can be move to it's own component
   const validateForm = (): boolean => {
     const newErrors: ValidationErrors = {};
 
@@ -135,6 +133,7 @@ const SOAPNoteForm: React.FC = () => {
 
   const handleInputChange = (field: string, value: string) => {
     if (field.includes('.')) {
+      // TODO: what happen if there's a deeper structure?
       const [parent, child, grandchild] = field.split('.');
       setFormData(prev => {
         if (grandchild) {
@@ -245,10 +244,10 @@ const SOAPNoteForm: React.FC = () => {
   }
 
   if(isSuccess) {
-      setIsSubmitted(true)
-     } else if (error?.message){
-      setsubmitError( error?.message || 'something wrong')
-     }
+    setIsSubmitted(true)
+  } else if (error?.message){
+    setSubmitError( error?.message || 'something wrong')
+  }
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Card elevation={3}>

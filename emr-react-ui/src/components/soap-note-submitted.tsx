@@ -3,7 +3,9 @@ import { Button, Card, CardContent, Container, Typography } from "@mui/material"
 import {
   CheckCircle as CheckCircleIcon,
   Refresh as RefreshIcon,
+  List as ListIcon,
 } from '@mui/icons-material';
+
 import { useRouter } from "next/router";
 interface SoapNoteSubmittedProps {
   formData: {
@@ -12,7 +14,7 @@ interface SoapNoteSubmittedProps {
   handleReset: () => void;
 } 
 
-export const SoapNoteSubmitted = ({handleReset, formData}: SoapNoteSubmittedProps) => {
+const SoapNoteSubmitted = ({handleReset, formData}: SoapNoteSubmittedProps) => {
     const router = useRouter()
     const handleToList = () => {
       router.push('/soap-notes/list')
@@ -38,15 +40,16 @@ export const SoapNoteSubmitted = ({handleReset, formData}: SoapNoteSubmittedProp
               Create New Note
             </Button>
             <Button
-              variant="contained"
+              variant="outlined"
               size="small"
               onClick={handleToList}
-              startIcon={<RefreshIcon />}
+              startIcon={<ListIcon />}
             >
-              To list page
+              View All Notes
             </Button>
           </CardContent>
         </Card>
       </Container>
     )
   }
+export default SoapNoteSubmitted
