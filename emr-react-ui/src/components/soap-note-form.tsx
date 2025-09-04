@@ -187,6 +187,7 @@ const SOAPNoteForm: React.FC = () => {
   const handleGenerate = async () => {
     setIsGenerating(true)
     try {
+      // TODO: use tanStack to do the api call
       const data = await generatePlan(formData)
       if (data && data.result) {
         setFormData(prev => ({
