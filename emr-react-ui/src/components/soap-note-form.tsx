@@ -243,10 +243,11 @@ const SOAPNoteForm: React.FC = () => {
     setIsSubmitted(false);
   };
 
+  // TODO: do a redirect to confirm page
   if (isSubmitted) {
     return <SoapNoteSubmitted handleReset={handleReset} formData={formData} />
   }
-
+  // TODO: do redirect after success
   if(isSuccess) {
     setIsSubmitted(true)
   } else if (error?.message){
