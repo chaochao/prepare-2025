@@ -25,7 +25,6 @@ export const SoapNoteList = () => {
   const handleToCreate = () => {
     router.push(CREATE_PATH)
   }
-  console.log("soapNotes:", data);
   return (
     <Card elevation={3} sx={{ maxWidth: 800, margin: 'auto', mt: 4 }}>
       <CardContent>

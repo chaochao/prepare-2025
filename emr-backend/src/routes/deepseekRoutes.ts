@@ -14,8 +14,6 @@ Please provide the 'plan' in less than 5 sentences.`;
 };
 router.post('/generate', async (req, res) => {
   try {
-    console.log(req.body)
-
     const { soapData, model = 'deepseek-chat', max_tokens = 2000 } = req.body;
 
     if (!soapData || !soapData.subjective || !soapData.objective || !soapData.assessment) {
@@ -32,9 +30,6 @@ router.post('/generate', async (req, res) => {
     max_tokens: max_tokens || 500,
     temperature: 0.7,
   });
-
-
-  console.log(completion.choices[0].message.content);
 
     res.json({
       result: completion.choices[0].message.content,

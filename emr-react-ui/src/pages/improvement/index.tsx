@@ -1,8 +1,9 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import { Button, Paper } from '@mui/material';
+import { Button } from '@mui/material';
 
+// TODO: move to component
 export default function StateTextFields() {
   const [name, setName] = React.useState('in control');
   const [display, setDisplay] = React.useState('')
@@ -11,7 +12,6 @@ export default function StateTextFields() {
     const inputValue = inputRef.current ? inputRef.current.value : '';
     setDisplay(inputValue)
   };
-  console.log("refresh")
   return (
     <Box component="div" sx={{margin: '1rem'}}>
       <div style={{ display: 'flex', gap: '1rem', marginBottom:'0.5rem'}}>
