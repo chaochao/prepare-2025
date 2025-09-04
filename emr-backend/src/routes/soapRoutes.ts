@@ -1,15 +1,15 @@
 import { Router, Request, Response } from 'express';
 import { soapService } from '../services/soapService';
 import { validateCreateSOAPNote, validateUpdateSOAPNote } from '../middleware/validation';
-require('dotenv').config()
-import OpenAI from 'openai';
+import 'dotenv/config'
+
 const router = Router();
 
 // GET /api/soap - Get all SOAP notes
+// pagination for larger data
 router.get('/', (req: Request, res: Response): void => {
   try {
     const { patientId } = req.query;
-    
     let notes;
     if (patientId && typeof patientId === 'string') {
       notes = soapService.getSOAPNotesByPatientId(patientId);
@@ -58,11 +58,6 @@ router.get('/:id', (req: Request, res: Response): void => {
     });
   }
 });
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 
 // POST /api/soap - Create a new SOAP note
 router.post('/', validateCreateSOAPNote, (req: Request, res: Response): void => {
